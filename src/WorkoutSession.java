@@ -35,8 +35,6 @@ class WorkoutSession {
         return duration > 0;
     }
 
-
-    @Override
     public String toString() {
         return "Session [id=" + sessionId + ", member=" + memberName + ", trainer=" + trainerName + ", time=" + duration + "]";
     }

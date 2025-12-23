@@ -33,7 +33,6 @@ class Trainer {
         return specialization.equals(type);
     }
 
-    @Override
     public String toString() {
         return "Trainer [id=" + trainerId + ", name=" + name + ", spec=" + specialization + ", exp=" + experience + "]";
     }
