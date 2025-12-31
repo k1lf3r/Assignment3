@@ -1,11 +1,14 @@
+public class Member {
 
-class Member {
     private int memberId;
     private String name;
     private int age;
     private String membershipType;
 
     public Member(int memberId, String name, int age, String membershipType) {
+        if (memberId <= 0) throw new IllegalArgumentException();
+        if (age < 0) throw new IllegalArgumentException();
+
         this.memberId = memberId;
         this.name = name;
         this.age = age;
@@ -17,10 +20,11 @@ class Member {
     public int getAge() { return age; }
     public String getMembershipType() { return membershipType; }
 
-    public void setMemberId(int memberId) { this.memberId = memberId; }
-    public void setName(String name) { this.name = name; }
-    public void setAge(int age) { this.age = age; }
-    public void setMembershipType(String membershipType) { this.membershipType = membershipType; }
+    public void setAge(int age) {
+        if (age >= 0) {
+            this.age = age;
+        }
+    }
 
     public boolean isActive() {
         return age > 0;
@@ -30,7 +34,11 @@ class Member {
         this.membershipType = "Premium";
     }
 
+    @Override
     public String toString() {
-        return "Member [id=" + memberId + ", name=" + name + ", age=" + age + ", type=" + membershipType + "]";
+        return "Member [ID=" + memberId +
+                ", Name=" + name +
+                ", Age=" + age +
+                ", Type=" + membershipType + "]";
     }
 }

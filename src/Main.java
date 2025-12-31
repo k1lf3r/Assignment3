@@ -1,57 +1,111 @@
-// Yelgazy Dias , IT-#2505 , Gym Proejct
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("=== Gym Management===\n=== Boy Next Door ===\n");
+        Scanner scanner = new Scanner(System.in);
 
-        Member m1 = new Member(67, "Dias", 22, "Basic");
-        Member m2 = new Member(52, "John Pork", 25, "Basic");
+        List<Member> members = new ArrayList<>();
+        List<Trainer> trainers = new ArrayList<>();
+        List<WorkoutSession> sessions = new ArrayList<>();
 
-        Trainer t1 = new Trainer(101, "Mik", "Power", 7);
-        Trainer t2 = new Trainer(102, "Bob-shbob", "Cardio", 2);
+        // Initial test data
+        members.add(new Member(67, "Dias", 22, "Basic"));
+        members.add(new Member(52, "John Pork", 25, "Basic"));
 
-        WorkoutSession s1 = new WorkoutSession(42, "Dias", "Mik", 45); // Jestkiy jim leja 200kg
+        trainers.add(new Trainer(101, "Mik", "Power", 7));
+        trainers.add(new Trainer(102, "Bob-shbob", "Cardio", 2));
 
-        // 1. Display initial state
-        System.out.println("--- Initial State ---");
-        System.out.println(m1);
-        System.out.println(m2);
-        System.out.println(t1);
-        System.out.println(t2);
-        System.out.println(s1);
+        sessions.add(new WorkoutSession(42, "Dias", "Mik", 45));
 
-        // 2. Test getters
-        System.out.println("\n--- Getters ---");
-        System.out.println("Member: " + m1.getMemberId() + ", " + m1.getName() + ", " + m1.getAge() + ", " + m1.getMembershipType());
-        System.out.println("Trainer: " + t1.getTrainerId() + ", " + t1.getName() + ", " + t1.getSpecialization() + ", " + t1.getExperience());
-        System.out.println("Session: " + s1.getSessionId() + ", " + s1.getMemberName() + ", " + s1.getTrainerName() + ", " + s1.getDuration());
+        boolean running = true;
 
-        // 3. Test setters
-        System.out.println("\n--- Setters ---");
-        m2.setAge(26);
-        m2.setMembershipType("Premium");
-        t2.setExperience(3);
-        s1.setDuration(55);
+        while (running) {
+            System.out.println("\n=== Gym Management Menu ===");
+            System.out.println("1. Add Member");
+            System.out.println("2. Add Trainer");
+            System.out.println("3. View All Members");
+            System.out.println("4. View All Trainers");
+            System.out.println("5. Exit");
+            System.out.print("Choose option: ");
 
-        System.out.println(m2);
-        System.out.println(t2);
-        System.out.println(s1);
+            String choice = scanner.nextLine();
 
-        // 4. Test additional methods
-        System.out.println("\n--- Methods ---");
+            switch (choice) {
+                case "1":
+                    addMember(scanner, members);
+                    break;
+                case "2":
+                    addTrainer(scanner, trainers);
+                    break;
+                case "3":
+                    viewMembers(members);
+                    break;
+                case "4":
+                    viewTrainers(trainers);
+                    break;
+                case "5":
+                    running = false;
+                    System.out.println("Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid option");
+            }
+        }
 
-        System.out.println("Is member active: " + m1.isActive());
-        m1.upgrade();
-        System.out.println(m1);
+        scanner.close();
+    }
 
-        System.out.println("Is trainer experienced: " + t1.isExperienced());
-        System.out.println("Can teach Cardio: " + t2.canTeach("Cardio"));
+    private static void addMember(Scanner sc, List<Member> members) {
+        try {
+            System.out.print("ID: ");
+            int id = Integer.parseInt(sc.nextLine());
+            System.out.print("Name: ");
+            String name = sc.nextLine();
+            System.out.print("Age: ");
+            int age = Integer.parseInt(sc.nextLine());
+            System.out.print("Membership type: ");
+            String type = sc.nextLine();
 
-        s1.extend(12);
-        System.out.println("Session complete: " + s1.complete());
-        System.out.println(s1);
+            members.add(new Member(id, name, age, type));
+            System.out.println("Member added successfully");
+        } catch (Exception e) {
+            System.out.println("Invalid data");
+        }
+    }
 
+    private static void addTrainer(Scanner sc, List<Trainer> trainers) {
+        try {
+            System.out.print("ID: ");
+            int id = Integer.parseInt(sc.nextLine());
+            System.out.print("Name: ");
+            String name = sc.nextLine();
+            System.out.print("Specialization: ");
+            String spec = sc.nextLine();
+            System.out.print("Experience: ");
+            int exp = Integer.parseInt(sc.nextLine());
+
+            trainers.add(new Trainer(id, name, spec, exp));
+            System.out.println("Trainer added successfully");
+        } catch (Exception e) {
+            System.out.println("Invalid data");
+        }
+    }
+
+    private static void viewMembers(List<Member> members) {
+        System.out.println("\n--- Members ---");
+        for (Member m : members) {
+            System.out.println(m);
+        }
+    }
+
+    private static void viewTrainers(List<Trainer> trainers) {
+        System.out.println("\n--- Trainers ---");
+        for (Trainer t : trainers) {
+            System.out.println(t);
+        }
     }
 }

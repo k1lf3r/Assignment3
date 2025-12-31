@@ -1,13 +1,14 @@
-
-class Trainer {
+public class Trainer {
 
     private int trainerId;
     private String name;
     private String specialization;
     private int experience;
 
-
     public Trainer(int trainerId, String name, String specialization, int experience) {
+        if (trainerId <= 0) throw new IllegalArgumentException();
+        if (experience < 0) throw new IllegalArgumentException();
+
         this.trainerId = trainerId;
         this.name = name;
         this.specialization = specialization;
@@ -19,21 +20,19 @@ class Trainer {
     public String getSpecialization() { return specialization; }
     public int getExperience() { return experience; }
 
-
-    public void setTrainerId(int trainerId) { this.trainerId = trainerId; }
-    public void setName(String name) { this.name = name; }
-    public void setSpecialization(String specialization) { this.specialization = specialization; }
-    public void setExperience(int experience) { this.experience = experience; }
-
     public boolean isExperienced() {
         return experience >= 5;
     }
 
     public boolean canTeach(String type) {
-        return specialization.equals(type);
+        return specialization.equalsIgnoreCase(type);
     }
 
+    @Override
     public String toString() {
-        return "Trainer [id=" + trainerId + ", name=" + name + ", spec=" + specialization + ", exp=" + experience + "]";
+        return "Trainer [ID=" + trainerId +
+                ", Name=" + name +
+                ", Spec=" + specialization +
+                ", Exp=" + experience + "]";
     }
 }
