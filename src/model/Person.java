@@ -37,7 +37,7 @@ public abstract class Person implements Identifiable {
     @Override
     public String getName() { return name; }
 
-    // abstract methods to be implemented by children
     public abstract String getRole();
     public abstract String getInfo();
+    public int getAge() { return age; }
 }

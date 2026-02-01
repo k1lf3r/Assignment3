@@ -4,6 +4,8 @@ import model.Member;
 import model.Person;
 import model.Trainer;
 import exception.InvalidDataException;
+import database.PersonDAO;
+import database.DatabaseConnection;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,13 +14,25 @@ public class GymConsole implements Menu {
 
     private final ArrayList<Person> people = new ArrayList<>();
     private final Scanner sc = new Scanner(System.in);
+    private final PersonDAO personDAO = new PersonDAO();
 
     public GymConsole() {
-        try {
-            people.add(new Member(1, "Dias", 22, "Basic"));
-            people.add(new Trainer(2, "Mik", 30, "Power", 7));
-        } catch (InvalidDataException e) {
-            System.err.println(e.getMessage());
+        DatabaseConnection.testConnection();
+        people.addAll(personDAO.selectAll());
+
+        if (people.isEmpty()) {
+            try {
+                Member m = new Member(1, "Dias", 22, "Basic");
+                Trainer t = new Trainer(2, "Mik", 30, "Power", 7);
+
+                people.add(m);
+                people.add(t);
+
+                personDAO.insertMember(m);
+                personDAO.insertTrainer(t);
+            } catch (InvalidDataException e) {
+                System.err.println(e.getMessage());
+            }
         }
     }
 
@@ -50,10 +64,25 @@ public class GymConsole implements Menu {
         System.out.print("Choice: ");
     }
 
+    private boolean isIdExists(int id) {
+        for (Person p : people) {
+            if (p.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void addMember() {
         try {
             System.out.print("ID: ");
             int id = Integer.parseInt(sc.nextLine());
+
+            if (isIdExists(id)) {
+                System.err.println("Error: ID " + id + " already exists");
+                return;
+            }
+
             System.out.print("Name: ");
             String name = sc.nextLine();
             System.out.print("Age: ");
@@ -61,7 +90,9 @@ public class GymConsole implements Menu {
             System.out.print("Type: ");
             String type = sc.nextLine();
 
-            people.add(new Member(id, name, age, type));
+            Member member = new Member(id, name, age, type);
+            personDAO.insertMember(member);
+            people.add(member);
             System.out.println("Member added");
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -72,6 +103,12 @@ public class GymConsole implements Menu {
         try {
             System.out.print("ID: ");
             int id = Integer.parseInt(sc.nextLine());
+
+            if (isIdExists(id)) {
+                System.err.println("Error: ID " + id + " already exists");
+                return;
+            }
+
             System.out.print("Name: ");
             String name = sc.nextLine();
             System.out.print("Age: ");
@@ -81,7 +118,9 @@ public class GymConsole implements Menu {
             System.out.print("Experience: ");
             int exp = Integer.parseInt(sc.nextLine());
 
-            people.add(new Trainer(id, name, age, spec, exp));
+            Trainer trainer = new Trainer(id, name, age, spec, exp);
+            personDAO.insertTrainer(trainer);
+            people.add(trainer);
             System.out.println("Trainer added");
         } catch (Exception e) {
             System.err.println(e.getMessage());
